@@ -7,6 +7,36 @@
 
 # 3. Kubernetes Dashboard 
 
+<img width="1912" height="1077" alt="image" src="https://github.com/user-attachments/assets/394544ee-5f76-4a54-a740-f897e0dcf739" />
+
+# 4.ArgoCD 
+
+<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/f475435d-a13b-4014-88b2-e7bdced1ace7" />
+
+# 5. Application Running 
+
+<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/fb5a9d34-7667-4815-ae94-e040c78eebe9" />
+
+#  6. Grafana
+
+<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/6ef4eb46-801a-4a7b-8139-18f44f1da5d3" />
+
+#  7. Prometheus
+
+<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/c722b0be-a8f6-4d93-8eaa-083d15d1b487" />
+
+
+#  8. Project Architecture Diagram
+<img width="727" height="677" alt="image" src="https://github.com/user-attachments/assets/7d029ac9-afb5-4675-994b-c5a782ad5256" />
+
+#  9. Push Final Kubernetes YAMLs to GitHub
+
+
+
+
+
+
+
 
 
 
