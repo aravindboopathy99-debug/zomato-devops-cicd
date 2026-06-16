@@ -1,176 +1,210 @@
-# 1. Cluster Validation
-<img width="1917" height="352" alt="image" src="https://github.com/user-attachments/assets/ccfc92f5-340e-48ed-9713-b1384a21ffaa" />
+# 🍕 Zomato App — End-to-End DevOps CI/CD Pipeline
+
+A production-grade DevOps project that deploys a Zomato food delivery clone application using a fully automated CI/CD pipeline on AWS — covering code quality, security scanning, containerisation, and GitOps-based deployment.
+
+---
+
+## 🚀 Live Demo
+
+> Application deployed and accessible at: `http://18.214.185.83:3000`  
+> *(AWS EC2 instance — may be stopped to avoid charges)*
+
+---
+
+## 🏗️ Architecture Overview
+
+```
+Developer Push (GitHub)
+        │
+        ▼
+┌─────────────────┐
+│   Jenkins CI    │  ← Hosted on AWS EC2 (m7i-flex.large)
+│   13-Stage      │
+│   Pipeline      │
+└────────┬────────┘
+         │
+    ┌────┴─────────────────────────────────────────┐
+    │                                              │
+    ▼                                              ▼
+SonarQube Analysis                        OWASP Dependency Check
+Quality Gate ✅                           Security Scan ✅
+    │                                              │
+    └──────────────┬───────────────────────────────┘
+                   │
+                   ▼
+         Trivy File System Scan ✅
+                   │
+                   ▼
+         Docker Build & Push
+         → aravindwin/zomato:latest
+                   │
+                   ▼
+         Trivy Image Scan ✅
+                   │
+                   ▼
+         Deploy Container on EC2
+                   │
+                   ▼
+         ArgoCD (GitOps Sync) ✅
+         Status: Healthy + Synced
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Tools Used |
+|---|---|
+| Cloud | AWS EC2, AWS EKS |
+| CI/CD | Jenkins |
+| Code Quality | SonarQube |
+| Security Scanning | OWASP Dependency Check, Trivy |
+| Containerisation | Docker, Docker Hub |
+| GitOps | ArgoCD v3.4.2 |
+| Source Control | GitHub |
+| OS | Amazon Linux 2023 |
+
+---
+
+## 📋 Jenkins Pipeline Stages
+
+The pipeline consists of **13 automated stages**:
+
+| # | Stage | Description |
+|---|---|---|
+| 1 | Declarative: Tool Install | Install required tools |
+| 2 | Clean WS | Clean workspace before build |
+| 3 | Code | Checkout source code from GitHub |
+| 4 | SonarQube Analysis | Static code analysis |
+| 5 | Quality Gates | Enforce SonarQube quality gate |
+| 6 | Install Dependencies | Install npm/app dependencies |
+| 7 | OWASP | Dependency vulnerability scan |
+| 8 | Trivy FS Scan | File system security scan |
+| 9 | Docker Build | Build Docker image |
+| 10 | Docker Push | Push image to Docker Hub |
+| 11 | Trivy Image Scan | Container image vulnerability scan |
+| 12 | Deploy Container | Deploy app on EC2 |
+| 13 | Declarative: Post Actions | Cleanup and notifications |
+
+---
+
+## ✅ SonarQube Quality Gate Results
+
+| Metric | Result |
+|---|---|
+| Quality Gate | ✅ Passed |
+| Bugs | 2 (C rating) |
+| Vulnerabilities | 0 (A rating) |
+| Security Hotspots | 0.0% |
+| Code Smells | 0 (A rating) |
+| Lines of Code | 1.3k |
+
+---
 
-# 2. Kubernetes Scaling Proof
+## 🐳 Docker Hub
 
-<img width="1917" height="191" alt="image" src="https://github.com/user-attachments/assets/cb6e6e95-04ee-4468-88c0-bab6bb8261fe" />
+Image published at: `docker.io/aravindwin/zomato:latest`
 
-# 3. Kubernetes Dashboard 
+```bash
+# Pull and run the image
+docker pull aravindwin/zomato:latest
+docker run -d -p 3000:3000 aravindwin/zomato:latest
+```
 
-<img width="1912" height="1077" alt="image" src="https://github.com/user-attachments/assets/394544ee-5f76-4a54-a740-f897e0dcf739" />
+---
 
-# 4.ArgoCD 
+## 🔄 ArgoCD — GitOps Deployment
 
-<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/f475435d-a13b-4014-88b2-e7bdced1ace7" />
+| Property | Value |
+|---|---|
+| Application | zomato |
+| Status | ✅ Healthy + Synced |
+| Repository | GitHub |
+| Namespace | default |
+| Destination | in-cluster |
+| ArgoCD Version | v3.4.2 |
 
-# 5. Application Running 
+ArgoCD continuously monitors the GitHub repository and automatically syncs any changes to the Kubernetes cluster — ensuring the deployed state always matches the Git state.
 
-<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/fb5a9d34-7667-4815-ae94-e040c78eebe9" />
+---
 
-#  6. Grafana
+## ☁️ AWS Infrastructure
 
-<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/6ef4eb46-801a-4a7b-8139-18f44f1da5d3" />
+| Instance | Type | Purpose |
+|---|---|---|
+| project-1 | m7i-flex.large | Jenkins + App Server |
+| nodes-us-east | t3.small | EKS Worker Node |
+| control-plane | t3.small | EKS Control Plane |
 
-#  7. Prometheus
+---
 
-<img width="1917" height="1077" alt="image" src="https://github.com/user-attachments/assets/c722b0be-a8f6-4d93-8eaa-083d15d1b487" />
+## 🚀 How to Run This Project
 
+### Prerequisites
+- AWS Account
+- Docker installed
+- Jenkins installed on EC2
+- kubectl configured
+- ArgoCD installed on cluster
 
-#  8. Project Architecture Diagram
-<img width="727" height="677" alt="image" src="https://github.com/user-attachments/assets/7d029ac9-afb5-4675-994b-c5a782ad5256" />
+### Steps
 
-#  9. Push Final Kubernetes YAMLs to GitHub
+```bash
+# 1. Clone this repository
+git clone https://github.com/aravindboopathy99-debug/<repo-name>.git
 
-<img width="251" height="92" alt="image" src="https://github.com/user-attachments/assets/195ce546-ae21-4cf3-b9e9-906bd9571b0f" />
+# 2. Set up Jenkins pipeline
+# - Create new pipeline job in Jenkins
+# - Point to this repo's Jenkinsfile
+# - Add credentials: DockerHub, SonarQube token, AWS
 
-#  10. Self-healing pod recreation
-<img width="1917" height="262" alt="image" src="https://github.com/user-attachments/assets/ef52dcd3-d62c-45ca-a8d3-6f33b1d8c6bf" />
+# 3. Run the pipeline
+# Trigger build in Jenkins — all 13 stages run automatically
 
+# 4. Verify deployment
+docker ps
+# Should show: aravindwin/zomato:latest running on port 3000
 
+# 5. Access the application
+# Open: http://<your-ec2-ip>:3000
+```
 
+---
 
+## 📸 Screenshots
 
+| Component | Screenshot |
+|---|---|
+| Zomato App Running | ![App](screenshots/zomato-app.png) |
+| Jenkins Pipeline | ![Jenkins](screenshots/jenkins-pipeline.png) |
+| SonarQube Results | ![SonarQube](screenshots/sonarqube.png) |
+| Docker Hub | ![Docker](screenshots/dockerhub.png) |
+| AWS EC2 Instances | ![EC2](screenshots/ec2-instances.png) |
+| ArgoCD Synced | ![ArgoCD](screenshots/argocd-synced.png) |
 
+---
 
+## 📚 Key Learnings
 
+- Built a real-world 13-stage CI/CD pipeline from scratch using Jenkins
+- Integrated security scanning at multiple levels (OWASP + Trivy FS + Trivy Image)
+- Implemented GitOps using ArgoCD for automated, drift-free deployments
+- Managed containerised workloads on AWS EC2 and EKS
+- Enforced code quality gates using SonarQube before every deployment
 
+---
 
+## 👨‍💻 Author
 
+**Aravind Boopathy**  
+DevOps Engineer | AZ-104 | Terraform Associate  
+📍 Ontario, Canada  
+🔗 [LinkedIn](https://www.linkedin.com/in/aravind-boopathy-19049337a/)  
+🐳 [Docker Hub](https://hub.docker.com/u/aravindwin)
 
+---
 
+## ⭐ If you found this project useful, please give it a star!
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# Zomato-Clone
-
-
-
-
-
-
-
-# Triggered CI/CD
-# enable actions
-fix username
